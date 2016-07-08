@@ -10,13 +10,9 @@ const logger = {
 
   _metaData: null,
 
-  init: (params) => {
+  init: function(params) {
     winston.remove(winston.transports.Console);
     if (params.filename) {
-      this._metaData = {
-        env: params.stackName,
-      };
-
       winston.add(DailyRotateFile, {
         name: params.name,
         level: params.level ? params.level : 'debug',
@@ -42,25 +38,27 @@ const logger = {
     }
   },
 
-  formatMessage: (msg, res) => JSON.stringify(Object.assign({ uuid: res.locals.uuid }, msg, this._metaData)),
+  formatMessage: function(msg, res) {
+    return JSON.stringify(Object.assign({ uuid: res.locals.uuid }, msg, this._metaData));
+  },
 
-  debug: (msg, res) => {
+  debug: function(msg, res) {
     winston.debug(this.formatMessage(msg, res));
   },
 
-  verbose: (msg, res) => {
+  verbose: function(msg, res) {
     winston.verbose(this.formatMessage(msg, res));
   },
 
-  info: (msg, res) => {
+  info: function(msg, res) {
     winston.info(this.formatMessage(msg, res));
   },
 
-  warn: (msg, res) => {
+  warn: function(msg, res) {
     winston.warn(this.formatMessage(msg, res));
   },
 
-  error: (msg, res) => {
+  error: function(msg, res) {
     winston.error(this.formatMessage(msg, res));
   },
 

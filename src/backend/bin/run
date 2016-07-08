@@ -1,0 +1,3 @@
+#!/bin/bash
+
+nodemon --debug=5858 -w . ./server.js

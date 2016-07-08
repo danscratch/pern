@@ -2,11 +2,23 @@
   index.js
 */
 
-const express = require('express');
-const app = express();
+const app = require('express')();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const logger = require('./logger.js');
+const responseTime = require('response-time');
 const uuid = require('uuid');
+
+const UNLOGGED_URLS = {
+  '/api/ping': true,
+  '/api/server_status': true,
+  '/admin/ping': true,
+};
+
+logger.init({
+  level: 'debug',
+  stackName: 'backend',
+});
 
 app.set('port', process.env.PORT || 3000);
 
@@ -32,8 +44,31 @@ app.all('*', (req, res, next) => {
   res.locals.referrer = req.get('Referrer');
   res.locals.uuid = uuid.v4();
 
+  if (!UNLOGGED_URLS[req.originalUrl]) {
+    logger.verbose({
+      category: 'HTTP_REQUEST',
+      method: req.method,
+      url: req.originalUrl,
+      version: res.locals.version,
+      ip: res.locals.ip,
+      userAgent: res.locals.userAgent,
+      referrer: res.locals.referrer,
+      body: req.body,
+    }, res);
+  }
+
   next();
 });
+
+app.use(responseTime((req, res, time) => {
+  if (typeof UNLOGGED_URLS[req.originalUrl] === 'undefined') {
+    logger.verbose({
+      category: 'TIMING',
+      time: Math.ceil(time),
+      statusCode: res.statusCode,
+    }, res);
+  }
+}));
 
 
 app.get('/', (req, res) => {
