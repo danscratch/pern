@@ -12,8 +12,15 @@
     "type": "git"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
-    "lodash": "^4.13.1"
+    "lodash": "^4.13.1",
+    "moment": "^2.14.1",
+    "response-time": "^2.3.1",
+    "uuid": "^2.0.2",
+    "winston": "^2.2.0",
+    "winston-daily-rotate-file": "^1.1.4"
   },
   "devDependencies": {
     "eslint": "^3.0.1",

@@ -9,8 +9,14 @@ SET UP
 
 * install `eslint`
 
- `npm install eslint -g`
+ ```
+ npm install eslint -g
+ ```
 
 * install `nginx`
 
- `brew install nginx`
+ ```
+ brew install nginx
+ cp src/backend/conf/nginx.conf /usr/local/etc/nginx
+ sudo nginx
+ ```
