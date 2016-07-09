@@ -35,7 +35,24 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 
-app.all('*', (req, res, next) => {
+// make sure the sessionId is set
+app.use((req, res, next) => {
+  let sessionId = req.cookies[process.env.COOKIE_SESSIONID];
+  if (!sessionId) {
+    sessionId = uuid.v4();
+    res.cookie(process.env.COOKIE_SESSIONID, sessionId, {
+      expires: new Date(Date.now() + 60000 * 30),
+      secure: req.protocol === 'https',
+      path: '/',
+    });
+  }
+  res.locals.sessionId = sessionId;
+  next();
+});
+
+
+// store all global request variables in res.locals
+app.use((req, res, next) => {
   let ip = req.headers['x-forwarded-for'];
   if (ip) {
     ip = ip.split(',')[0];
@@ -45,7 +62,14 @@ app.all('*', (req, res, next) => {
   res.locals.userAgent = req.headers['user-agent'];
   res.locals.referrer = req.get('Referrer');
   res.locals.uuid = uuid.v4();
+  res.locals.browserId = req.cookies[process.env.COOKIE_BROWSERID];
 
+  next();
+});
+
+
+// log the incoming request
+app.use((req, res, next) => {
   if (!UNLOGGED_URLS[req.originalUrl]) {
     logger.verbose({
       category: 'HTTP_REQUEST',
@@ -62,8 +86,10 @@ app.all('*', (req, res, next) => {
   next();
 });
 
+
+// log the time taken by the request on the way out
 app.use(responseTime((req, res, time) => {
-  if (typeof UNLOGGED_URLS[req.originalUrl] === 'undefined') {
+  if (!UNLOGGED_URLS[req.originalUrl]) {
     logger.verbose({
       category: 'TIMING',
       time: Math.ceil(time),
@@ -71,6 +97,13 @@ app.use(responseTime((req, res, time) => {
     }, res);
   }
 }));
+
+
+// ignore options request
+app.options('*', (req, res) => res.sendStatus(200));
+
+
+require('./api')(app);
 
 
 app.get('/', (req, res) => {
