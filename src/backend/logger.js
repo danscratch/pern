@@ -39,7 +39,9 @@ const logger = {
   },
 
   formatMessage: function(msg, res) {
-    return JSON.stringify(Object.assign({ uuid: res.locals.uuid }, msg, this._metaData));
+    const defaultParams = {};
+    if (res && res.locals && res.locals.uuid) defaultParams.uuid = res.locals.uuid;
+    return JSON.stringify(Object.assign(defaultParams, msg, this._metaData));
   },
 
   debug: function(msg, res) {

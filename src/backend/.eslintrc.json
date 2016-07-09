@@ -12,6 +12,8 @@
       "max-len": 0,
       "object-shorthand": 0,
       "func-names": 0,
+      "no-nested-ternary": 2,
+      "no-unused-vars": [2, { "args": "none"}],
       "space-before-function-paren": 0
     }
 }

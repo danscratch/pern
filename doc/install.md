@@ -20,3 +20,22 @@ SET UP
  cp src/backend/conf/nginx.conf /usr/local/etc/nginx
  sudo nginx
  ```
+
+* install `nodemon`
+
+ ```
+ npm install nodemon -g
+ ```
+
+* install `postgres`
+
+ ```
+ brew update
+ brew install postgres
+ # To have launchd start postgresql now and restart at login:
+ brew services start postgresql
+ # create database:
+ createdb core
+ # log in
+ psql -d core
+ ```

@@ -5,9 +5,11 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+require('./globals.js');
 const logger = require('./logger.js');
 const responseTime = require('response-time');
 const uuid = require('uuid');
+require('./database.js');
 
 const UNLOGGED_URLS = {
   '/api/ping': true,
