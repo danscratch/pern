@@ -1,4 +1,9 @@
 {
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "sourceType": "module",
+      "allowImportExportEverywhere": false
+    },
     "extends": "airbnb",
     "installedESLint": true,
     "plugins": [

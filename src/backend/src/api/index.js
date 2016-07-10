@@ -11,26 +11,22 @@ module.exports = function(app) {
   app.get('/api/ping', (req, res) => res.sendStatus(200));
 
 
-  app.get('/api/user/:userId', (req, res) => {
+  app.get('/api/user/:userId', async (req, res) => {
     const userId = req.params.userId;
-    let client;
-    return dbpool.connect().then(_client => {
-      client = _client;
-      return client.query('select * from t_user where id=$1', [userId]);
-    })
-    .then(rset => {
+    const client = await dbpool.connect();
+    try {
+      const rset = await client.query('select * from t_user where id=$1', [userId]);
       if (rset.rows.length === 0) {
         logger.error({category: 'USER', status: 'FAILED', msg: 'no such user', userId});
         return res.sendStatus(400);
       }
       const user = rset.rows[0];
-      client.release();
       return res.status(200).send(user);
-    })
-    .catch((err) => {
+    } catch (err) {
       logger.error({category: 'USER', status: 'ERROR', msg: err.message});
-      client.release();
       return res.sendStatus(500);
-    });
+    } finally {
+      client.release();
+    }
   });
 };

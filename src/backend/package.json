@@ -2,9 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "backend api",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "build": "babel -w src/ -d build/ -s"
+    "build": "babel -w src/ -d build/ -s",
+    "dev": "nodemon --debug=5858 -w build build/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,10 +26,11 @@
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
+    "babel-eslint": "^6.1.2",
     "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-0": "^6.5.0",
-    "eslint": "^3.0.1",
+    "eslint": "^2.13.1",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.10.2",
     "eslint-plugin-jsx-a11y": "^1.5.5",
