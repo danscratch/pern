@@ -1,6 +1,9 @@
 /*
-  index.js
+  server.js
 */
+
+require('babel-core/register');
+require('babel-polyfill');
 
 const app = require('express')();
 const bodyParser = require('body-parser');

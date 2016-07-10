@@ -4,7 +4,7 @@
   "description": "backend api",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel -w . -d build/ --ignore node_modules,build"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,10 @@
     "winston-daily-rotate-file": "^1.1.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
     "eslint": "^3.0.1",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.10.2",
