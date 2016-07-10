@@ -4,7 +4,7 @@
   "description": "backend api",
   "main": "server.js",
   "scripts": {
-    "build": "babel -w . -d build/ --ignore node_modules,build"
+    "build": "babel -w src/ -d build/ -s"
   },
   "author": "",
   "license": "ISC",
