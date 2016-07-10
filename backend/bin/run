@@ -1,3 +1,0 @@
-#!/bin/bash
-
-nodemon --debug=5858 -w build build/server.js
