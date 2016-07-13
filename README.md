@@ -8,3 +8,7 @@ PERN (postgres, express, react, node) is a framework that allows developers inte
  * configuration files (e.g., nginx)
  * Instructions on how to set everything up
  * (eventually) it would be nice to have a minimal React Native app to demonstrate communication with the backend.
+
+### License
+
+This framework is made available under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license. 
