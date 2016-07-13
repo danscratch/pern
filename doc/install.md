@@ -17,7 +17,7 @@ SET UP
 
  ```
  brew install nginx
- cp src/backend/conf/nginx.conf /usr/local/etc/nginx
+ cp src/conf/nginx.conf /usr/local/etc/nginx
  sudo nginx
  ```
 
