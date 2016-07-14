@@ -8,7 +8,7 @@
     "dev": "nodemon --debug=5858 -w build build/server.js"
   },
   "author": "",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git"
   },

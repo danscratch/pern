@@ -15,7 +15,11 @@ const config = {
       {
         test: /\.jsx?/,
         include: APP_DIR,
-        loader: 'babel',
+        loaders: ['react-hot', 'babel'],
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'postcss', 'sass'],
       },
     ],
   },
