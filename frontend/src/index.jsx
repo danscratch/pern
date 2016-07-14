@@ -20,7 +20,4 @@ render(
   document.getElementById('root')
 );
 
-store.dispatch(fetchUser(1))
-  .then(() => {
-    console.log(JSON.stringify(store.getState(), null, 2));
-  });
+store.dispatch(fetchUser(1));
