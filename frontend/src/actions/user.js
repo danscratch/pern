@@ -1,14 +1,14 @@
 
 import fetch from 'isomorphic-fetch';
 
-export const FETCH_USER = 'FETCH_USER';
-export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
-export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
+export const USER_FETCH = 'USER_FETCH';
+export const USER_FETCH_SUCCESS = 'USER_FETCH_SUCCESS';
+export const USER_FETCH_FAILURE = 'USER_FETCH_FAILURE';
 
 export function fetchUser(id) {
   return function(dispatch) {
     dispatch({
-      type: FETCH_USER,
+      type: USER_FETCH,
       status: 200,
       userData: null,
     });
@@ -22,14 +22,14 @@ export function fetchUser(id) {
       })
       .then(userData => {
         dispatch({
-          type: FETCH_USER_SUCCESS,
+          type: USER_FETCH_SUCCESS,
           status: statusText,
           userData,
         });
       })
       .catch(err => {
         dispatch({
-          type: FETCH_USER_FAILURE,
+          type: USER_FETCH_FAILURE,
           status: statusText,
           userData: null,
         });
