@@ -2,25 +2,21 @@
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
 const logger = require('../logger.js');
-import { getUserById, getUserByUsername } from '../db/user.js';
+import { getUserById, validateUser } from '../db/user.js';
 
 
 module.exports = function(app) {
   app.use(passport.initialize());
 
 
-  passport.use(new BasicStrategy(
-    async (username, password, done) => {
-      try {
-        const user = await getUserByUsername(username);
-        if (!user) { return done(null, false); }
-        if (!user.verifyPassword(password)) { return done(null, false); }
-        return done(null, user);
-      } catch (err) {
-        return done(err);
-      }
-    }
-  ));
+  passport.use(new BasicStrategy((username, password, done) => {
+    return validateUser(username, password)
+      .then(user => done(null, user))
+      .catch(err => {
+        if (err) return done(err);
+        return done(null, false);
+      });
+  }));
 
 
   app.get('/api/user/:userId', async (req, res) => {
@@ -44,7 +40,12 @@ module.exports = function(app) {
   });
 
 
-  app.post('/api/user/login', async (req, res) => {
-    res.sendStatus(200);
-  });
+  app.post('/api/user/login', (req, res) =>
+    validateUser(req.body.username, req.body.password)
+    .then(user => res.status(200).send(user))
+    .catch(err => {
+      logger.warn({category: 'USER', status: 'FAILED', msg: `Failed login attempt for user "${req.body.username}"`, error: err});
+      return res.sendStatus(403);
+    })
+  );
 };
