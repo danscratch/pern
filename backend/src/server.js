@@ -106,18 +106,9 @@ app.use(responseTime((req, res, time) => {
 app.options('*', (req, res) => res.sendStatus(200));
 
 
+// set up api calls
 require('./api')(app);
 
-
-app.get('/', (req, res) => {
-  res.type('text/plain');
-  res.send('AAAAAAAAAA');
-});
-
-app.get('/about', (req, res) => {
-  res.type('text/plain');
-  res.send('BBBBBBBBBB');
-});
 
 app.use((req, res) => {
   res.type('text/plain');
