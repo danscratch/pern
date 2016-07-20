@@ -1,8 +1,22 @@
 
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
+const JwtStrategy = require('passport-jwt').Strategy;
+const jwt = require('jsonwebtoken');
 const logger = require('../logger.js');
-import { createUser, getUserById, validateUser } from '../db/user.js';
+import { createUser, getUserById, validateUser, userExists } from '../db/user.js';
+
+
+const JWT_SECRET = 'changethis';
+const JWT_OPTIONS = {
+  secretOrKey: JWT_SECRET,
+  jwtFromRequest: req => req.cookies[process.env.COOKIE_AUTH],
+};
+const generateJwt = function(userId) {
+  return jwt.sign({
+    userId,
+  }, JWT_SECRET);
+};
 
 
 module.exports = function(app) {
@@ -16,6 +30,11 @@ module.exports = function(app) {
         if (err) return done(err);
         return done(null, false);
       });
+  }));
+
+
+  passport.use(new JwtStrategy(JWT_OPTIONS, (jwtPayload, done) => {
+    userExists(jwtPayload.userId, done);
   }));
 
 
@@ -35,9 +54,17 @@ module.exports = function(app) {
   });
 
 
+  // create user by POSTing to /api/user
   app.post('/api/user', async (req, res) =>
     createUser(req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.email)
-    .then(user => res.status(200).send(user))
+    .then(user => {
+      const token = generateJwt(user.id);
+      res.cookie(process.env.COOKIE_AUTH, token);
+      return res.status(200).send({
+        userId: user.id,
+        authToken: token,
+      });
+    })
     .catch(err => {
       logger.warn({category: 'USER', cmd: 'create', status: 'FAILED', msg: `Failed to create user "${req.body.username}"`, error: err});
       return res.sendStatus(403);
@@ -47,7 +74,14 @@ module.exports = function(app) {
 
   app.post('/api/user/login', (req, res) =>
     validateUser(req.body.username, req.body.password)
-    .then(user => res.status(200).send(user))
+    .then(user => {
+      const token = generateJwt(user.id);
+      res.cookie('auth', token);
+      return res.status(200).send({
+        userId: user.id,
+        authToken: token,
+      });
+    })
     .catch(err => {
       logger.warn({category: 'USER', cmd: 'login', status: 'FAILED', msg: `Failed login attempt for user "${req.body.username}"`, error: err});
       return res.sendStatus(403);

@@ -90,6 +90,19 @@ export async function getUserById(userId) {
   }
 }
 
+export async function userExists(userId) {
+  const client = await dbpool.connect();
+  try {
+    const rset = await client.query('select count(*) from t_user where id=$1', [userId]);
+    if (rset.rows.length === 0) {
+      return false;
+    }
+    return rset.rows[0].count === 1;
+  } finally {
+    client.release();
+  }
+}
+
 export async function getUserByUsername(username) {
   const client = await dbpool.connect();
   try {

@@ -6,6 +6,7 @@ process.env.LOG_DATE_PATTERN = '-YYYY-MM-DD-HH';
 
 process.env.COOKIE_SESSIONID = 'SESSIONID';
 process.env.COOKIE_BROWSERID = 'BROWSERID';
+process.env.COOKIE_AUTH = 'auth';
 
 process.env.DB_USER = 'admin';
 process.env.DB_PASSWORD = 'foo';

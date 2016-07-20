@@ -8,6 +8,7 @@ require('babel-polyfill');
 const app = require('express')();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const passport = require('passport');
 require('./globals.js');
 const logger = require('./logger.js');
 const responseTime = require('response-time');
@@ -35,6 +36,16 @@ app.use(bodyParser.urlencoded({
 
 // Read user cookies, and put into req.cookies
 app.use(cookieParser());
+
+
+// authenticate - this should come before the HTTP_REQUEST gets logged, so that the
+// logging statement can include the userId
+app.use((req, res, next) => {
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
+    res.locals.user = !!user ? user : null;
+    return next();
+  })(req, res, next);
+});
 
 
 // make sure the sessionId is set
