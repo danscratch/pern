@@ -22,20 +22,20 @@ export function validateUser(username, plaintextPassword) {
       return client.query('select * from t_user where username=$1', [username]);
     })
     .then(rset => {
+      client.release();
       if (rset.rows.length === 0) {
-        client.release();
         reject(null);
       }
-      const userData = rset.rows[0];
-      client.release();
-      bcrypt.compare(plaintextPassword, userData.password, (err, result) => {
+      const userDAO = rset.rows[0];
+      bcrypt.compare(plaintextPassword, userDAO.password, (err, result) => {
         if (err) { return reject(err); }
         if (!result) { return reject(false); }
         return resolve({
-          username: userData.username,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          email: userData.email,
+          id: userDAO.id,
+          username: userDAO.username,
+          firstName: userDAO.firstName,
+          lastName: userDAO.lastName,
+          email: userDAO.email,
         });
       });
     })
@@ -49,7 +49,7 @@ export function validateUser(username, plaintextPassword) {
 export function createUser(username, password, firstName, lastName, email) {
   let client;
   let passwordHash;
-  return generatePassword()
+  return generatePassword(password)
   .then(_passwordHash => {
     passwordHash = _passwordHash;
     return dbpool.connect();
@@ -57,12 +57,19 @@ export function createUser(username, password, firstName, lastName, email) {
   .then(_client => {
     client = _client;
     return client.query(
-      'insert into t_user (username, password, firstName, lastName, email) values ($1, $2, $3, $4, $5) RETURNING id',
+      'insert into t_user (username, password, first_name, last_name, email) values ($1, $2, $3, $4, $5) RETURNING id',
       [username, passwordHash, firstName, lastName, email]);
   })
   .then(rset => {
     client.release();
-    return Promise.resolve(rset.rows.length === 0 ? 0 : rset.rows[0].id);
+    if (rset.rows.length === 0) return Promise.reject(null);
+    return Promise.resolve({
+      id: rset.rows[0].id,
+      username,
+      firstName,
+      lastName,
+      email,
+    });
   })
   .catch(err => {
     client.release();
