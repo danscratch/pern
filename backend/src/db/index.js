@@ -3,7 +3,7 @@
   take care of all necessary database set up
 */
 
-const logger = require('./logger.js');
+const logger = require('../logger.js');
 const pg = require('pg');
 const config = {
   user: process.env.DB_USER,

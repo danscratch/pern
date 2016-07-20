@@ -1,12 +1,15 @@
 
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
+const BasicStrategy = require('passport-http').BasicStrategy;
 const logger = require('../logger.js');
-import { getUser, getUserByUsername } from '../db/user.js';
+import { getUserById, getUserByUsername } from '../db/user.js';
 
 
 module.exports = function(app) {
-  passport.use(new LocalStrategy(
+  app.use(passport.initialize());
+
+
+  passport.use(new BasicStrategy(
     async (username, password, done) => {
       try {
         const user = await getUserByUsername(username);
@@ -23,7 +26,7 @@ module.exports = function(app) {
   app.get('/api/user/:userId', async (req, res) => {
     const userId = req.params.userId;
     try {
-      const user = await getUser(userId);
+      const user = await getUserById(userId);
       if (!user) {
         logger.error({category: 'USER', status: 'ERROR', msg: `user ${userId} not found`}, res);
         return res.sendStatus(400);
@@ -35,7 +38,13 @@ module.exports = function(app) {
     }
   });
 
+
   app.post('/api/user', async (req, res) => {
+    res.sendStatus(200);
+  });
+
+
+  app.post('/api/user/login', async (req, res) => {
     res.sendStatus(200);
   });
 };

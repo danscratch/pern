@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const dbpool = require('../database.js');
+const dbpool = require('./index.js');
 // const logger = require('../logger.js');
 
 const SALT_ROUNDS = 10;
@@ -46,7 +46,7 @@ export function createUser(username, password, firstName, lastName, email) {
   });
 }
 
-export async function getUser(userId) {
+export async function getUserById(userId) {
   const client = await dbpool.connect();
   try {
     const rset = await client.query('select * from t_user where id=$1', [userId]);
