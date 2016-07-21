@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import Header from '../components/Header';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>
+        <Header user={this.props.user} />
         <div>HELLO WORLD</div>
         <div>
           {this.props.children}
@@ -21,13 +18,14 @@ class App extends Component {
 
 App.propTypes = {
   // Injected by React Router
-  children: PropTypes.node
-}
+  children: PropTypes.node,
+  user: PropTypes.object,
+};
 
 function mapStateToProps(state, ownProps) {
   return {
     user: state.user.userData,
-  }
+  };
 }
 
-export default connect(mapStateToProps, {})(App)
+export default connect(mapStateToProps, {})(App);
