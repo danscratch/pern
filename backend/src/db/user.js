@@ -33,8 +33,8 @@ export function validateUser(username, plaintextPassword) {
         return resolve({
           id: userDAO.id,
           username: userDAO.username,
-          firstName: userDAO.firstName,
-          lastName: userDAO.lastName,
+          firstName: userDAO.first_name,
+          lastName: userDAO.last_name,
           email: userDAO.email,
         });
       });

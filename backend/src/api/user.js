@@ -59,11 +59,8 @@ module.exports = function(app) {
     createUser(req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.email)
     .then(user => {
       const token = generateJwt(user.id);
-      res.cookie(process.env.COOKIE_AUTH, token);
-      return res.status(200).send({
-        userId: user.id,
-        authToken: token,
-      });
+      res.cookie(process.env.COOKIE_AUTH, token, { expires: new Date(Date.now() + 900000000) });
+      return res.status(200).send(user);
     })
     .catch(err => {
       logger.warn({category: 'USER', cmd: 'create', status: 'FAILED', msg: `Failed to create user "${req.body.username}"`, error: err});
@@ -76,11 +73,8 @@ module.exports = function(app) {
     validateUser(req.body.username, req.body.password)
     .then(user => {
       const token = generateJwt(user.id);
-      res.cookie('auth', token);
-      return res.status(200).send({
-        userId: user.id,
-        authToken: token,
-      });
+      res.cookie(process.env.COOKIE_AUTH, token, { expires: new Date(Date.now() + 900000000) });
+      return res.status(200).send(user);
     })
     .catch(err => {
       logger.warn({category: 'USER', cmd: 'login', status: 'FAILED', msg: `Failed login attempt for user "${req.body.username}"`, error: err});

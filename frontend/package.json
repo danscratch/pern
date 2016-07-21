@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
-    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.13.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
@@ -22,7 +21,8 @@
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
