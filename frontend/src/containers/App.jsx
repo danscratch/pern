@@ -8,10 +8,7 @@ class App extends Component {
     return (
       <div>
         <Header user={this.props.user} />
-        <div>HELLO WORLD</div>
-        <div>
-          {this.props.children}
-        </div>
+        {this.props.children}
         <Footer />
       </div>
     );

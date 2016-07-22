@@ -6,7 +6,7 @@ import { Router } from 'react-router';
 
 require('./Root.scss');
 
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const IS_PRODUCTION = true; //process.env.NODE_ENV === 'production';
 
 export default class Root extends Component {
   render() {
