@@ -1,10 +1,11 @@
 @import "../styles/global";
 
 body {
-  width: 800px;;
+  width: 100%;
   font-family: helvetica, arial, sans-serif;
   font-size: 12px;
-  margin-left: 100px;
+  margin: 0;
+  display: block;
 }
 
 a {

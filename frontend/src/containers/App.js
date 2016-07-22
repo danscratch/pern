@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Footer from '../components/Footer.jsx';
+import Header from '../components/Header.jsx';
 
 class App extends Component {
   render() {
