@@ -4,13 +4,13 @@ const BasicStrategy = require('passport-http').BasicStrategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const jwt = require('jsonwebtoken');
 const logger = require('../logger.js');
-import { createUser, getUserById, validateUser, userExists } from '../db/user.js';
+import { createUser, getUserById, validateUser } from '../db/user.js';
 
 
 const JWT_SECRET = 'changethis';
 const JWT_OPTIONS = {
   secretOrKey: JWT_SECRET,
-  jwtFromRequest: req => req.cookies[process.env.COOKIE_AUTH],
+  jwtFromRequest: req => (req && req.cookies ? req.cookies[process.env.COOKIE_AUTH] : null),
 };
 const generateJwt = function(userId) {
   return jwt.sign({
@@ -34,7 +34,12 @@ module.exports = function(app) {
 
 
   passport.use(new JwtStrategy(JWT_OPTIONS, (jwtPayload, done) => {
-    userExists(jwtPayload.userId, done);
+    return getUserById(jwtPayload.userId, done)
+      .then(user => done(null, user))
+      .catch(err => {
+        if (err) return done(err);
+        return done(null, false);
+      });
   }));
 
 
@@ -59,7 +64,7 @@ module.exports = function(app) {
     createUser(req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.email)
     .then(user => {
       const token = generateJwt(user.id);
-      res.cookie(process.env.COOKIE_AUTH, token, { expires: new Date(Date.now() + 900000000) });
+      res.cookie(process.env.COOKIE_AUTH, token, { expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60)) });
       return res.status(200).send(user);
     })
     .catch(err => {
@@ -73,7 +78,7 @@ module.exports = function(app) {
     validateUser(req.body.username, req.body.password)
     .then(user => {
       const token = generateJwt(user.id);
-      res.cookie(process.env.COOKIE_AUTH, token, { expires: new Date(Date.now() + 900000000) });
+      res.cookie(process.env.COOKIE_AUTH, token, { expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60)) });
       return res.status(200).send(user);
     })
     .catch(err => {

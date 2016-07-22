@@ -4,6 +4,16 @@ const dbpool = require('./index.js');
 
 const SALT_ROUNDS = 10;
 
+function constructUserObject(userDAO) {
+  return !userDAO ? null : {
+    id: userDAO.id,
+    username: userDAO.username,
+    firstName: userDAO.first_name,
+    lastName: userDAO.last_name,
+    email: userDAO.email,
+  };
+}
+
 function generatePassword(plaintextPassword) {
   return new Promise((resolve, reject) => {
     bcrypt.hash(plaintextPassword, SALT_ROUNDS, (err, hash) => {
@@ -19,7 +29,7 @@ export function validateUser(username, plaintextPassword) {
     return dbpool.connect()
     .then(_client => {
       client = _client;
-      return client.query('select * from t_user where username=$1', [username]);
+      return client.query('select id, username, password, first_name, last_name, email from t_user where username=$1', [username]);
     })
     .then(rset => {
       client.release();
@@ -30,13 +40,7 @@ export function validateUser(username, plaintextPassword) {
       bcrypt.compare(plaintextPassword, userDAO.password, (err, result) => {
         if (err) { return reject(err); }
         if (!result) { return reject(false); }
-        return resolve({
-          id: userDAO.id,
-          username: userDAO.username,
-          firstName: userDAO.first_name,
-          lastName: userDAO.last_name,
-          email: userDAO.email,
-        });
+        return resolve(constructUserObject(userDAO));
       });
     })
     .catch(err => {
@@ -80,24 +84,11 @@ export function createUser(username, password, firstName, lastName, email) {
 export async function getUserById(userId) {
   const client = await dbpool.connect();
   try {
-    const rset = await client.query('select * from t_user where id=$1', [userId]);
+    const rset = await client.query('select id, username, password, first_name, last_name, email from t_user where id=$1', [userId]);
     if (rset.rows.length === 0) {
       return null;
     }
-    return rset.rows[0];
-  } finally {
-    client.release();
-  }
-}
-
-export async function userExists(userId) {
-  const client = await dbpool.connect();
-  try {
-    const rset = await client.query('select count(*) from t_user where id=$1', [userId]);
-    if (rset.rows.length === 0) {
-      return false;
-    }
-    return rset.rows[0].count === 1;
+    return constructUserObject(rset.rows[0]);
   } finally {
     client.release();
   }
@@ -106,7 +97,7 @@ export async function userExists(userId) {
 export async function getUserByUsername(username) {
   const client = await dbpool.connect();
   try {
-    const rset = await client.query('select * from t_user where username=$1', [username]);
+    const rset = await client.query('select id, username, password, first_name, last_name, email from t_user where username=$1', [username]);
     if (rset.rows.length === 0) {
       return null;
     }
