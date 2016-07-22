@@ -4,14 +4,22 @@ import routes from '../routes';
 import DevTools from './DevTools';
 import { Router } from 'react-router';
 
+import { fetchUser } from '../actions/user';
+import { Config } from '../globals';
+
 require('./Root.scss');
 
-const IS_PRODUCTION = true; //process.env.NODE_ENV === 'production';
-
 export default class Root extends Component {
+  componentWillMount() {
+    const userId = 1;
+    if (userId) {
+      this.props.store.dispatch(fetchUser(userId));
+    }
+  }
+
   render() {
     const { store, history } = this.props;
-    const tools = IS_PRODUCTION ? null : (<DevTools />);
+    const tools = Config.SHOW_DEVTOOLS ? (<DevTools />) : null;
 
     return (
       <Provider store={store}>

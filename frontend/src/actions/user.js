@@ -1,37 +1,46 @@
 
-export const USER_FETCH = 'USER_FETCH';
-export const USER_FETCH_SUCCESS = 'USER_FETCH_SUCCESS';
-export const USER_FETCH_FAILURE = 'USER_FETCH_FAILURE';
+import Cookies from 'cookies-js';
 
-export const USER_LOGIN = 'USER_LOGIN';
-export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
-export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE';
+
+export const UserConstants = {
+  COOKIE_AUTH: 'auth',
+
+  USER_FETCH: 'USER_FETCH',
+  USER_FETCH_SUCCESS: 'USER_FETCH_SUCCESS',
+  USER_FETCH_FAILURE: 'USER_FETCH_FAILURE',
+
+  USER_LOGOUT: 'USER_LOGOUT',
+
+  USER_LOGIN: 'USER_LOGIN',
+  USER_LOGIN_SUCCESS: 'USER_LOGIN_SUCCESS',
+  USER_LOGIN_FAILURE: 'USER_LOGIN_FAILURE',
+};
 
 export function fetchUser(id) {
-  return function(dispatch) {
+  return (dispatch, getState) => {
     dispatch({
-      type: USER_FETCH,
+      type: UserConstants.USER_FETCH,
       status: 200,
       userData: null,
     });
 
     let statusText;
 
-    return fetch(`/api/user/${id}`)
+    return fetch(`/api/user/${id}`, { credentials: 'same-origin' })
       .then(res => {
         statusText = res.statusText;
         return res.json();
       })
       .then(userData => {
         dispatch({
-          type: USER_FETCH_SUCCESS,
+          type: UserConstants.USER_FETCH_SUCCESS,
           status: statusText,
           userData,
         });
       })
       .catch(err => {
         dispatch({
-          type: USER_FETCH_FAILURE,
+          type: UserConstants.USER_FETCH_FAILURE,
           status: statusText,
           userData: null,
         });
@@ -39,10 +48,19 @@ export function fetchUser(id) {
   };
 }
 
-export function login(username, password) {
-  return function(dispatch) {
+export function logout() {
+  return (dispatch, getState) => {
+    Cookies.expire(UserConstants.COOKIE_AUTH);
     dispatch({
-      type: USER_LOGIN,
+      type: UserConstants.USER_LOGOUT,
+    });
+  };
+}
+
+export function login(username, password) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: UserConstants.USER_LOGIN,
       status: 200,
       userData: null,
     });
@@ -51,6 +69,7 @@ export function login(username, password) {
     let status;
 
     return fetch('/api/user/login', {
+      credentials: 'same-origin',
       method: 'post',
       headers: {
         Accept: 'application/json',
@@ -68,14 +87,14 @@ export function login(username, password) {
     })
     .then(userData => {
       dispatch({
-        type: USER_LOGIN_SUCCESS,
+        type: UserConstants.USER_LOGIN_SUCCESS,
         status: statusText,
         userData,
       });
     })
     .catch(err => {
       dispatch({
-        type: USER_LOGIN_FAILURE,
+        type: UserConstants.USER_LOGIN_FAILURE,
         status,
         userData: null,
       });

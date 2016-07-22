@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
+    "cookies-js": "^1.2.2",
     "lodash": "^4.13.1",
     "react": "^15.2.1",
     "react-addons-shallow-compare": "^15.2.1",
