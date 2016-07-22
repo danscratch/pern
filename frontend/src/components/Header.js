@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+import PureComponent from './PureComponent';
 
-export default class Header extends Component {
+export default class Header extends PureComponent {
   render() {
     let logoutLink;
     if (this.props.user) {
@@ -18,10 +19,8 @@ export default class Header extends Component {
       </div>
     );
   }
-};
+}
 
 Header.propTypes = {
   user: PropTypes.object,
 };
-
-export default Header;

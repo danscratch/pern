@@ -1,0 +1,16 @@
+@import "../styles/global";
+
+.footer__div {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 10px;
+  background-color: #efefef;
+}
+
+.footer__div_div {
+  text-align: center;
+  width: 800px;
+  margin-left: 100px;
+}
