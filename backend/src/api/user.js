@@ -43,6 +43,11 @@ module.exports = function(app) {
   }));
 
 
+  app.get('/api/user', async (req, res) => {
+    return res.status(200).send(res.locals.user);
+  });
+
+
   app.get('/api/user/:userId', async (req, res) => {
     const userId = req.params.userId;
     try {

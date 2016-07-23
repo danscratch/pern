@@ -20,6 +20,10 @@ export function fetchUserById(userId) {
   return fetch(`/api/user/${userId}`, fetchDefaultParamsGET);
 }
 
+export function fetchUserByJwt(userId) {
+  return fetch('/api/user', fetchDefaultParamsGET);
+}
+
 export function loginByUsernamePassword(username, password) {
   return fetch('/api/user/login', Object.assign({
     body: JSON.stringify({ username, password }),

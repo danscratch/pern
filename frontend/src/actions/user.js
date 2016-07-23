@@ -1,11 +1,9 @@
 
-import Cookies from 'cookies-js';
-import { fetchUserById, loginByUsernamePassword } from '../services/api';
+import { fetchUserByJwt, loginByUsernamePassword } from '../services/api';
+import { Auth } from '../services/auth';
 
 
 export const UserConstants = {
-  COOKIE_AUTH: 'auth',
-
   USER_FETCH: 'USER_FETCH',
   USER_FETCH_SUCCESS: 'USER_FETCH_SUCCESS',
   USER_FETCH_FAILURE: 'USER_FETCH_FAILURE',
@@ -17,7 +15,7 @@ export const UserConstants = {
   USER_LOGIN_FAILURE: 'USER_LOGIN_FAILURE',
 };
 
-export function fetchUser(userId) {
+export function fetchUser() {
   return (dispatch, getState) => {
     dispatch({
       type: UserConstants.USER_FETCH,
@@ -27,7 +25,7 @@ export function fetchUser(userId) {
 
     let statusText;
 
-    return fetchUserById(userId)
+    return fetchUserByJwt()
       .then(res => {
         statusText = res.statusText;
         return res.json();
@@ -51,7 +49,7 @@ export function fetchUser(userId) {
 
 export function logout() {
   return (dispatch, getState) => {
-    Cookies.expire(UserConstants.COOKIE_AUTH);
+    Auth.logout();
     dispatch({
       type: UserConstants.USER_LOGOUT,
     });

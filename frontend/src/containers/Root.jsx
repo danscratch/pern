@@ -4,16 +4,17 @@ import routes from '../routes';
 import DevTools from './DevTools';
 import { Router } from 'react-router';
 
-import { fetchUser } from '../actions/user';
+import { fetchUser, login } from '../actions/user';
 import { Config } from '../globals';
+import { Auth } from '../services/auth';
 
 require('./Root.scss');
 
 export default class Root extends Component {
   componentWillMount() {
-    const userId = 1;
-    if (userId) {
-      this.props.store.dispatch(fetchUser(userId));
+    if (Auth.isLoggedIn()) {
+      this.props.store.dispatch(fetchUser());
+      // this.props.store.dispatch(login('DanCast', 'password'));
     }
   }
 
