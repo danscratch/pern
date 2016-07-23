@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import InputText from '../components/InputText.jsx';
-import InputPassword from '../components/InputPassword.jsx';
-import InputSubmit from '../components/InputSubmit.jsx';
+import InputText from '../components/InputText';
+import InputPassword from '../components/InputPassword';
+import InputSubmit from '../components/InputSubmit';
 import { login } from '../actions/user';
 
 class Login extends Component {

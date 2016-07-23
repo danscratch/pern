@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Footer from '../components/Footer.jsx';
-import Header from '../components/Header.jsx';
-import { logout, fetchUser, login } from '../actions/user';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import { logout, fetchUser } from '../actions/user';
 import { Auth } from '../services/auth';
 import { browserHistory } from 'react-router';
 
@@ -16,8 +16,6 @@ class App extends Component {
   componentWillMount() {
     if (Auth.isLoggedIn()) {
       this.props.fetchUser();
-    // } else {
-    //   this.props.login('DanCast', 'password');
     }
   }
 
@@ -48,7 +46,6 @@ App.propTypes = {
   children: PropTypes.node,
   user: PropTypes.object,
   fetchUser: PropTypes.func.isRequired,
-  login: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
 };
 
@@ -60,6 +57,5 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   fetchUser,
-  login,
   logout,
 })(App);

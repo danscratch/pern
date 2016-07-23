@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import configureStore from './store/configureStore';
-import Root from './containers/Root.jsx';
+import Root from './containers/Root';
 
 /* eslint-disable import/no-unresolved */
 // this line magically copies index.html into the build folder, courtesy of the file-loader plugin

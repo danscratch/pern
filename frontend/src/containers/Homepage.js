@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Login from '../components/Login.jsx';
+import Login from '../components/Login';
 import { Auth } from '../services/auth';
 
 require('./Homepage.scss');

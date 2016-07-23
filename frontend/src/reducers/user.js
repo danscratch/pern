@@ -1,4 +1,4 @@
-import { UserConstants } from '../actions/user.js';
+import { UserConstants } from '../actions/user';
 
 const initialState = {
   isFetching: false,
