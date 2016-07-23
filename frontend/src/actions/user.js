@@ -52,11 +52,9 @@ export function fetchUser() {
 }
 
 export function logout() {
-  return (dispatch, getState) => {
-    Auth.logout();
-    dispatch({
-      type: UserConstants.USER_LOGOUT,
-    });
+  Auth.logout();
+  return {
+    type: UserConstants.USER_LOGOUT,
   };
 }
 
