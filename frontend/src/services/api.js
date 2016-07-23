@@ -29,3 +29,15 @@ export function loginByUsernamePassword(username, password) {
     body: JSON.stringify({ username, password }),
   }, fetchDefaultParamsPOST));
 }
+
+export function createUser(userData) {
+  return fetch('/api/user', Object.assign({
+    body: JSON.stringify({
+      username: userData.username,
+      password: userData.password,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+    }),
+  }, fetchDefaultParamsPOST));
+}

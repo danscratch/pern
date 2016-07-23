@@ -17,6 +17,7 @@ export default function user(state = initialState, action) {
 
     case UserConstants.USER_FETCH:
     case UserConstants.USER_LOGIN:
+    case UserConstants.USER_CREATE:
       return {
         isFetching: true,
         userData: null,
@@ -26,6 +27,8 @@ export default function user(state = initialState, action) {
     case UserConstants.USER_LOGIN_FAILURE:
     case UserConstants.USER_FETCH_SUCCESS:
     case UserConstants.USER_FETCH_FAILURE:
+    case UserConstants.USER_CREATE_SUCCESS:
+    case UserConstants.USER_CREATE_FAILURE:
       return {
         isFetching: false,
         status: action.status,

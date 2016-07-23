@@ -1,17 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import InputText from '../components/InputText';
-import InputPassword from '../components/InputPassword';
+import SignupForm from '../components/SignupForm';
+
+require('./Signup.scss');
 
 
 class Signup extends Component {
 
   render() {
     return (
-      <div>
-        Signup page
-        <div><InputText placeholder="username" /></div>
-        <div><InputPassword placeholder="password" /></div>
+      <div className="signup__tile">
+        <SignupForm />
       </div>
     );
   }

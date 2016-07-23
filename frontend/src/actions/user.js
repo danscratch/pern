@@ -1,5 +1,5 @@
 
-import { fetchUserByJwt, loginByUsernamePassword } from '../services/api';
+import { fetchUserByJwt, loginByUsernamePassword, createUser } from '../services/api';
 import { Auth } from '../services/auth';
 
 
@@ -13,6 +13,10 @@ export const UserConstants = {
   USER_LOGIN: 'USER_LOGIN',
   USER_LOGIN_SUCCESS: 'USER_LOGIN_SUCCESS',
   USER_LOGIN_FAILURE: 'USER_LOGIN_FAILURE',
+
+  USER_CREATE: 'USER_CREATE',
+  USER_CREATE_SUCCESS: 'USER_CREATE_SUCCESS',
+  USER_CREATE_FAILURE: 'USER_CREATE_FAILURE',
 };
 
 export function fetchUser() {
@@ -86,6 +90,43 @@ export function login(username, password) {
     .catch(err => {
       dispatch({
         type: UserConstants.USER_LOGIN_FAILURE,
+        status,
+        userData: null,
+      });
+    });
+  };
+}
+
+export function signup(userData) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: UserConstants.USER_CREATE,
+      status: 200,
+      userData: null,
+    });
+
+    let statusText;
+    let status;
+
+    return createUser(userData)
+    .then(res => {
+      statusText = res.statusText;
+      status = res.status;
+      if (status !== 200) {
+        throw new Error();
+      }
+      return res.json();
+    })
+    .then(newUserData => {
+      dispatch({
+        type: UserConstants.USER_CREATE_SUCCESS,
+        status: statusText,
+        userData: newUserData,
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: UserConstants.USER_CREATE_FAILURE,
         status,
         userData: null,
       });

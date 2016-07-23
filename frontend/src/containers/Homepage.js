@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Login from '../components/Login';
+import LoginForm from '../components/LoginForm';
 import { Auth } from '../services/auth';
 
 require('./Homepage.scss');
@@ -17,11 +17,11 @@ class Homepage extends Component {
         contents = 'Welcome';
       }
     } else {
-      contents = (<Login />);
+      contents = (<LoginForm />);
     }
 
     return (
-      <div className="homepage__block">
+      <div className="homepage__tile">
         {contents}
       </div>
     );
