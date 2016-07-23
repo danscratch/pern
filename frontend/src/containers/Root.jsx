@@ -14,7 +14,8 @@ export default class Root extends Component {
   componentWillMount() {
     if (Auth.isLoggedIn()) {
       this.props.store.dispatch(fetchUser());
-      // this.props.store.dispatch(login('DanCast', 'password'));
+    } else {
+      this.props.store.dispatch(login('DanCast', 'password'));
     }
   }
 

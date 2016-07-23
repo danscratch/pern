@@ -1,0 +1,17 @@
+@import "../styles/global";
+
+.header__div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #3b5998;
+
+  div {
+    padding: 5px;
+    color: white;
+  }
+
+  a {
+    color: white;
+  }
+}
