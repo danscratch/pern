@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 
 export default class InputText extends Component {
 
@@ -9,6 +10,10 @@ export default class InputText extends Component {
         defaultValue={this.props.value}
         placeholder={this.props.placeholder}
         size={this.props.size}
+        autoFocus={this.props.autoFocus}
+        onBlur={this.props.onBlur}
+        onChange={this.props.onChange}
+        onKeyDown={this.props.onKeyDown}
       />
     );
   }
@@ -16,13 +21,21 @@ export default class InputText extends Component {
 }
 
 InputText.propTypes = {
-  value: PropTypes.string,
+  autoFocus: PropTypes.bool,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
   placeholder: PropTypes.string,
   size: PropTypes.number,
+  value: PropTypes.string,
 };
 
 InputText.defaultProps = {
-  value: '',
+  autoFocus: false,
+  onBlur: _.noop,
+  onChange: _.noop,
+  onKeyDown: _.noop,
   placeholder: '',
   size: 30,
+  value: '',
 };
