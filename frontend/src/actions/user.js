@@ -1,5 +1,6 @@
 
 import Cookies from 'cookies-js';
+import { fetchUserById, loginByUsernamePassword } from '../services/api';
 
 
 export const UserConstants = {
@@ -16,7 +17,7 @@ export const UserConstants = {
   USER_LOGIN_FAILURE: 'USER_LOGIN_FAILURE',
 };
 
-export function fetchUser(id) {
+export function fetchUser(userId) {
   return (dispatch, getState) => {
     dispatch({
       type: UserConstants.USER_FETCH,
@@ -26,7 +27,7 @@ export function fetchUser(id) {
 
     let statusText;
 
-    return fetch(`/api/user/${id}`, { credentials: 'same-origin' })
+    return fetchUserById(userId)
       .then(res => {
         statusText = res.statusText;
         return res.json();
@@ -68,15 +69,7 @@ export function login(username, password) {
     let statusText;
     let status;
 
-    return fetch('/api/user/login', {
-      credentials: 'same-origin',
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    })
+    return loginByUsernamePassword(username, password)
     .then(res => {
       statusText = res.statusText;
       status = res.status;
