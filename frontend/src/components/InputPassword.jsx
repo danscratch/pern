@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import _ from 'lodash';
+import PureComponent from './PureComponent';
 
-export default class InputPassword extends Component {
+export default class InputPassword extends PureComponent {
 
   render() {
     return (

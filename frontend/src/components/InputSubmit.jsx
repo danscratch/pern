@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+import PureComponent from './PureComponent';
 
-export default class InputSubmit extends Component {
+export default class InputSubmit extends PureComponent {
 
   render() {
     return (
