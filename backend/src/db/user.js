@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const dbpool = require('./index.js');
-// const logger = require('../logger.js');
 
 const SALT_ROUNDS = 10;
 

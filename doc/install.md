@@ -6,9 +6,9 @@ In order to get all this working, you'll need to set up some basic packages.
 
 The "N" of "PERN" is `node`, and we will need to install it in order to be able to run just about everything.
 
- 1. go to https://nodejs.org/en/
- 1. download 6.3.0
- 1. install
+1. go to https://nodejs.org/en/
+1. download 6.3.0
+1. install
 
 ###### `nginx`
 
@@ -18,6 +18,7 @@ The "N" of "PERN" is `node`, and we will need to install it in order to be able 
 brew update
 brew install nginx
 cp conf/nginx.conf /usr/local/etc/nginx
+# NOTE: you will need to alter the "root" variable in nginx.conf to point to the right directory for your system
 sudo nginx
 ```
 
