@@ -18,7 +18,6 @@ CSS is written using Sass `.scss` files.
 
 * `backend`
   * `build` - Generated files.
-  * `node_modules`
   * `src` - Source code. This is kept separate from `node_modules` and `build` so as to make searching and some configuration simpler. Some important `js` files are kept at the top level in here.
     * `api` - API commands.
     * `db` - Database commands.
@@ -26,7 +25,6 @@ CSS is written using Sass `.scss` files.
 * `doc` - Project documentation
 * `frontend`
   * `build` - Generated files.
-  * `node_modules`
   * `src` - Source code. This is kept separate from `node_modules` and `build` so as to make searching and some configuration simpler. Some important `js` files are kept at the top level in here.
     * `actions` - `redux` actions.
     * `components` - Pure/static React components.
