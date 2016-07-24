@@ -15,7 +15,7 @@ PERN (postgres, express, react, node) is a framework that allows developers inte
 
 ### Documentation
 
-Documentation can be found [here](doc/README.md)
+Documentation can be found [here](doc/README.md).
 
 ### License
 
