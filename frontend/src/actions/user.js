@@ -1,6 +1,5 @@
 
 import { fetchUserByJwt, loginByUsernamePassword, createUser } from '../services/api';
-import { Auth } from '../services/auth';
 
 
 export const UserActionTypes = {
@@ -52,7 +51,6 @@ export function fetchUser() {
 }
 
 export function logout() {
-  Auth.logout();
   return {
     type: UserActionTypes.USER_LOGOUT,
   };
