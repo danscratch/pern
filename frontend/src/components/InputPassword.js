@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import _ from 'lodash';
 import PureComponent from './PureComponent';
 
 export default class InputPassword extends PureComponent {
@@ -28,9 +27,6 @@ InputPassword.propTypes = {
 };
 
 InputPassword.defaultProps = {
-  onBlur: _.noop,
-  onChange: _.noop,
-  onKeyDown: _.noop,
   placeholder: '',
   size: 30,
 };

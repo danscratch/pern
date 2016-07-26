@@ -52,7 +52,7 @@ npm install
 At this point, you can generate all the necessary files (in the `frontend/build` directory) by running the following:
 ```
 cd frontend
-npm run build
+npm run dev
 ```
 
 As with `babel` in the `backend`, `webpack` is set up to watch for changes in the source files, and will automatically rebuild the javascript file (`frontend/build/bundle.js`) any time you update a source file.

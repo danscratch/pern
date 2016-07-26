@@ -1,12 +1,16 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
 import rootReducer from '../reducers';
-import DevTools from '../containers/DevTools';
-import { Config } from '../globals';
+
+let createLogger;
+if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
+  createLogger = require('redux-logger');
+  /* eslint-enable global-require */
+}
 
 export default function configureStore(preloadedState) {
-  const middleware = Config.SHOW_DEVTOOLS ? compose(applyMiddleware(thunk, createLogger()), DevTools.instrument()) : applyMiddleware(thunk, createLogger());
+  const middleware = createLogger ? applyMiddleware(thunk, createLogger()) : applyMiddleware(thunk);
 
   const store = createStore(
     rootReducer,
@@ -14,7 +18,7 @@ export default function configureStore(preloadedState) {
     middleware
   );
 
-  if (Config.ENVIRONMENT === 'dev' && module.hot) {
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
       /* eslint-disable global-require */

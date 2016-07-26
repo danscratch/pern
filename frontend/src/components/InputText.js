@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import _ from 'lodash';
 import PureComponent from './PureComponent';
 
 export default class InputText extends PureComponent {
@@ -33,9 +32,6 @@ InputText.propTypes = {
 
 InputText.defaultProps = {
   autoFocus: false,
-  onBlur: _.noop,
-  onChange: _.noop,
-  onKeyDown: _.noop,
   placeholder: '',
   size: 30,
   value: '',

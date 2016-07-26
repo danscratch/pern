@@ -1,10 +1,10 @@
-require('webpack');
+
 const path = require('path');
 
-const BUILD_DIR = path.resolve(__dirname, 'build');
-const APP_DIR = path.resolve(__dirname, 'src');
+const BUILD_DIR = path.normalize(path.resolve(__dirname, '..', 'build'));
+const APP_DIR = path.normalize(path.resolve(__dirname, '..', 'src'));
 
-const config = {
+module.exports = {
   entry: `${APP_DIR}/index.jsx`,
   output: {
     path: BUILD_DIR,
@@ -24,13 +24,6 @@ const config = {
     ],
   },
   resolve: {
-    // root: [path.join(__dirname, 'node_modules'), __dirname],
     extensions: ['', '.js', '.json', '.jsx'],
-    // modulesDirectories: ['node_modules', '.'],
-    // alias: {
-    //   styles: `${APP_DIR}/styles`,
-    // },
   },
 };
-
-module.exports = config;
