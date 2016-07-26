@@ -57,4 +57,10 @@ npm run dev
 
 As with `babel` in the `backend`, `webpack` is set up to watch for changes in the source files, and will automatically rebuild the javascript file (`frontend/build/bundle.js`) any time you update a source file.
 
+If you want to build a minified, optimized version of the `bundle.js` file, you can run with the `prod` keyword. Note that this will not watch for changes.
+```
+cd frontend
+npm run prod
+```
+
 This is pretty much it - to test that this is working, just verify that `bundle.js` is being constructed correctly, that there aren't any errors, and then load http://localhost in your browser. You should be good to go.
