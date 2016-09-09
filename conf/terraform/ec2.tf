@@ -69,7 +69,7 @@ resource "aws_instance" "web" {
     inline = [
       "sudo apt-get -y update",
       "curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -",
-      "sudo apt-get -y install nginx git nodejs",
+      "sudo apt-get -y install nginx git nodejs build-essential",
       "sudo npm install -g pm2",
       "curl -O https://bootstrap.pypa.io/get-pip.py",
       "sudo python get-pip.py",
