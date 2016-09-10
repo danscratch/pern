@@ -78,7 +78,7 @@ resource "aws_security_group" "world_visible_lb" {
   }
 }
 
-# A security group for the ELB so it is accessible via the web
+# security group for the web server so it can be accessed from the load balancer
 resource "aws_security_group" "lb_to_web_server" {
   name        = "lb_to_web_server"
   description = "security group for the web server so it can be accessed from the load balancer"
@@ -99,6 +99,44 @@ resource "aws_security_group" "lb_to_web_server" {
     security_groups = ["${aws_security_group.world_visible_lb.id}"]
   }
 
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# security group for web servers to access the db
+resource "aws_security_group" "web_to_db_server" {
+  name        = "web_to_db_server"
+  description = "security group for web servers to access the db"
+  vpc_id      = "${aws_vpc.default.id}"
+
+  # HTTP access from anywhere
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/24"]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["10.0.0.0/24"]
+  }
+}
+
+# whitelist of IP addresses able to ssh in
+resource "aws_security_group" "ssh_whitelist" {
+  name        = "ssh_whitelist"
+  description = "whitelist of IP addresses able to ssh in"
+  vpc_id      = "${aws_vpc.default.id}"
+
   ingress {
     from_port   = 22
     to_port     = 22
@@ -112,5 +150,19 @@ resource "aws_security_group" "lb_to_web_server" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# whitelist of IP addresses open to internal machines
+resource "aws_security_group" "internal_open_ports" {
+  name        = "internal_open_ports"
+  description = "whitelist of IP addresses open to internal machines"
+  vpc_id      = "${aws_vpc.default.id}"
+
+  ingress {
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    cidr_blocks = [ "10.0.0.0/16" ]
   }
 }

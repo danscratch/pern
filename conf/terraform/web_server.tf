@@ -54,7 +54,9 @@ resource "aws_instance" "web" {
 
   # Our Security group to allow access from the load balancer
   vpc_security_group_ids = [
-    "${aws_security_group.lb_to_web_server.id}"
+    "${aws_security_group.lb_to_web_server.id}",
+    "${aws_security_group.ssh_whitelist.id}",
+    "${aws_security_group.internal_open_ports.id}"
   ]
 
   # We're going to launch into the same subnet as our ELB. In a production
@@ -75,5 +77,9 @@ resource "aws_instance" "web" {
       "sudo python get-pip.py",
       "sudo pip install awscli"
     ]
+  }
+
+  tags {
+    Name = "${var.domain_name}-web"
   }
 }
