@@ -119,7 +119,7 @@ resource "aws_security_group" "web_to_db_server" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/24"]
+    cidr_blocks = ["10.0.0.0/16"]
   }
 
   # outbound internet access
@@ -127,7 +127,7 @@ resource "aws_security_group" "web_to_db_server" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.0.0.0/24"]
+    cidr_blocks = ["10.0.0.0/16"]
   }
 }
 
