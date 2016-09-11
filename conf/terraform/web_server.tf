@@ -37,7 +37,7 @@ resource "aws_iam_role_policy" "web_iam_role_policy" {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
       "Resource": [
-        "arn:aws:s3:::${var.domain_name}-releases",
+        "arn:aws:s3:::${var.domain_name}-release",
         "arn:aws:s3:::${var.domain_name}-puppet-agent"
       ]
     },
@@ -48,7 +48,7 @@ resource "aws_iam_role_policy" "web_iam_role_policy" {
         "s3:List*"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.domain_name}-releases/*",
+        "arn:aws:s3:::${var.domain_name}-release/*",
         "arn:aws:s3:::${var.domain_name}-puppet-agent/*"
       ]
     }
@@ -65,7 +65,7 @@ resource "aws_elb" "prod" {
 
   subnets         = ["${aws_subnet.subnet_east_1b.id}", "${aws_subnet.subnet_east_1c.id}"]
   security_groups = ["${aws_security_group.world_visible_lb.id}"]
-  # instances       = ["${aws_instance.web.id}"]
+  instances       = ["${aws_instance.web.id}"]
 
   listener {
     instance_port     = 81
@@ -88,6 +88,34 @@ resource "aws_elb" "prod" {
     timeout = 3
     target = "HTTP:80/api/ping"
     interval = 5
+  }
+}
+
+
+#####################
+# DNS
+
+resource "aws_route53_record" "raw" {
+  zone_id = "${aws_route53_zone.public.zone_id}"
+  name = "${var.domain_name}.com"
+  type = "A"
+
+  alias {
+    name = "${aws_elb.prod.dns_name}"
+    zone_id = "${aws_elb.prod.zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = "${aws_route53_zone.public.zone_id}"
+  name = "www"
+  type = "A"
+
+  alias {
+    name = "${aws_elb.prod.dns_name}"
+    zone_id = "${aws_elb.prod.zone_id}"
+    evaluate_target_health = true
   }
 }
 
@@ -143,5 +171,6 @@ resource "aws_instance" "web" {
 
   tags {
     Name = "${var.domain_name}-web"
+    SystemName = "web"
   }
 }

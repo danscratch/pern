@@ -163,6 +163,6 @@ resource "aws_security_group" "internal_open_ports" {
     from_port   = 8
     to_port     = 0
     protocol    = "icmp"
-    cidr_blocks = [ "10.0.0.0/16" ]
+    cidr_blocks = [ "0.0.0.0/0" ]
   }
 }
