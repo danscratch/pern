@@ -1,0 +1,84 @@
+#!/usr/bin/python
+
+"""
+foreach
+
+This python script will run a command on all instances with the specified "SystemName"
+tag, synchronously.
+"""
+
+
+import argparse
+import sys
+
+import boto.ec2
+from fabric.api import execute, env, run, task, settings
+
+
+@task
+def exec_command():
+    with settings(warn_only=True):
+        run(env.execCmd)
+
+
+class ExecCommand():
+
+    def __init__(self, system_name, region, cmd):
+        self.system_name = system_name
+        self.region = region
+        self.aws_conn = boto.ec2.connect_to_region(region)
+        self.cmd = cmd
+
+    def execCmd(self):
+        instances = self._system_ec2_instances()
+        self._exec_command(instances)
+
+    def _system_ec2_instances(self):
+        """
+        Check system exists in AWS. If system doesn't exist the script will exit
+
+        Returns:
+            List of instance objects
+        """
+        print u"Confirming {} exists in AWS...".format(self.system_name)
+        # Check for matching systems in AWS by checking tag SystemName
+        reservations = self.aws_conn.get_all_instances(filters={'tag:SystemName': self.system_name})
+        instances = [i for r in reservations for i in r.instances]
+        if not instances:
+            print u"System {} does not exist in AWS. Exiting".format(self.system_name)
+            sys.exit(1)
+        return instances
+
+    def _exec_command(self, instances):
+        """
+        Executes command on all web servers
+
+        Args:
+            instances: List of AWS instance objects
+        """
+        # Only need running AWS instances, therefore sort on running and get DNS name for SSHing
+        running_instances = []
+        for instance in instances:
+            if instance.state == 'running':
+                running_instances.append(instance.dns_name)
+
+        env.hosts = running_instances
+        # Ensure release process ssh's in user scratch, e.g. scratch@ip_address
+        env.user = 'ubuntu'
+        env.execCmd = self.cmd
+        execute(exec_command)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('system_name', help='Name of system', type=str)
+    parser.add_argument('--region', help='Name of AWS region', type=str, default='us-east-1')
+    parser.add_argument('--cmd', help="A command to run on all of the EC2 instances", type=str, default='logout')
+    args = parser.parse_args()
+
+    system_name = args.system_name
+    region = args.region
+    cmd = args.cmd
+
+
+    executor = ExecCommand(system_name,region,cmd)
+    executor.execCmd()

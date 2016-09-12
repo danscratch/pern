@@ -5,6 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "build": "babel -w src/ -d build/ -s",
+    "build_prod": "babel src/ -d build/ -s",
     "dev": "nodemon --debug=5858 -w build build/server.js"
   },
   "author": "",

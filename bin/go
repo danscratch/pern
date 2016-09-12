@@ -1,0 +1,67 @@
+#!/usr/bin/python
+
+"""
+go
+
+This python script will log you into a server with the specified "SystemName" tag
+You can also specify which of the servers, if there are multiple servers with the tag.
+"""
+
+
+import argparse
+import sys
+
+import boto.ec2
+from fabric.api import local
+
+
+class Go():
+
+    def __init__(self, system_name, region, index):
+        self.system_name = system_name
+        self.region = region
+        self.index = index
+        self.aws_conn = boto.ec2.connect_to_region(region)
+
+    def go(self):
+        instances = self._system_ec2_instances()
+        self._exec_command(instances)
+
+    def _system_ec2_instances(self):
+        """
+        Check system exists in AWS. If system doesn't exist the script will exit
+
+        Returns:
+            List of instance objects
+        """
+        # Check for matching systems in AWS by checking tag SystemName
+        reservations = self.aws_conn.get_all_instances(filters={'tag:SystemName': self.system_name})
+        instances = [i for r in reservations for i in r.instances]
+        if not instances:
+            print u"System {} does not exist in AWS. Exiting".format(self.system_name)
+            sys.exit(1)
+        return instances
+
+    def _exec_command(self, instances):
+        # Only need running AWS instances, therefore sort on running and get DNS name for SSHing
+        running_instances = []
+        for instance in instances:
+            if instance.state == 'running':
+                print instance.dns_name
+                running_instances.append(instance.dns_name)
+
+        local("ssh ubuntu@{}".format(running_instances[self.index]))
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('system_name', help='Name of system', type=str)
+    parser.add_argument('-i', '--index', help='Index of machine to ssh into', type=int, default=0)
+    args = parser.parse_args()
+
+    system_name = args.system_name
+    region = 'us-east-1'
+    index = args.index
+
+
+    executor = Go(system_name,region,index)
+    executor.go()
